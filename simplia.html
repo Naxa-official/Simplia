@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simplia — オンライン簿記教室</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FAF7F2;
+  --warm:#F0EBE1;
+  --green:#2D5A3D;
+  --green2:#3D7A54;
+  --green-light:#EBF3EE;
+  --gold:#B8963E;
+  --gold2:#D4AF6A;
+  --dark:#1A2420;
+  --gray:#7A8C84;
+  --border:rgba(45,90,61,0.15);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--dark);font-family:'Zen Kaku Gothic New',sans-serif;font-weight:300;line-height:1.8;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 4rem;display:flex;justify-content:space-between;align-items:center;transition:all 0.4s}
+nav.scrolled{background:rgba(250,247,242,0.96);border-bottom:1px solid var(--border);backdrop-filter:blur(8px)}
+.nav-logo{display:flex;flex-direction:column;line-height:1}
+.nav-logo-en{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;letter-spacing:0.15em;color:var(--green)}
+.nav-logo-ja{font-size:0.6rem;letter-spacing:0.2em;color:var(--gray);margin-top:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:0.78rem;letter-spacing:0.1em;transition:color 0.3s}
+.nav-links a:hover{color:var(--green)}
+.nav-cta{background:var(--green);color:var(--cream);padding:0.6rem 1.5rem;font-size:0.75rem;letter-spacing:0.1em;border:none;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:400;text-decoration:none;transition:all 0.3s;border-radius:2px}
+.nav-cta:hover{background:var(--green2)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:22px;height:1px;background:var(--dark);transition:all 0.3s}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 4rem;gap:4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-10%;top:-10%;width:60%;height:120%;background:radial-gradient(ellipse,var(--green-light) 0%,transparent 70%);pointer-events:none}
+.hero-bg-text{position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',serif;font-size:18rem;font-weight:300;color:rgba(45,90,61,0.04);line-height:1;letter-spacing:-0.05em;pointer-events:none;user-select:none}
+.hero-content{position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:0.8rem;margin-bottom:2rem;animation:fadeUp 0.8s ease both}
+.hero-tag::before{content:'';width:32px;height:1px;background:var(--gold)}
+.hero-tag span{font-size:0.65rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;line-height:1.15;letter-spacing:0.02em;margin-bottom:1.5rem;animation:fadeUp 0.8s 0.1s ease both}
+.hero-title em{color:var(--green);font-style:italic}
+.hero-desc{color:var(--gray);font-size:0.88rem;line-height:2;max-width:420px;margin-bottom:2.5rem;animation:fadeUp 0.8s 0.2s ease both}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both}
+.btn-primary{background:var(--green);color:var(--cream);padding:0.9rem 2rem;font-size:0.78rem;letter-spacing:0.1em;border:none;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:400;text-decoration:none;display:inline-block;transition:all 0.3s;border-radius:2px}
+.btn-primary:hover{background:var(--green2)}
+.btn-secondary{background:transparent;color:var(--green);padding:0.9rem 2rem;font-size:0.78rem;letter-spacing:0.1em;border:1.5px solid var(--green);cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;text-decoration:none;display:inline-block;transition:all 0.3s;border-radius:2px}
+.btn-secondary:hover{background:var(--green-light)}
+.hero-visual{position:relative;z-index:1;animation:fadeUp 0.8s 0.4s ease both}
+.hero-card{background:#fff;border-radius:12px;padding:2.5rem;box-shadow:0 20px 60px rgba(45,90,61,0.1);position:relative}
+.hero-card::before{content:'';position:absolute;top:-8px;left:2rem;right:2rem;height:8px;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:4px 4px 0 0}
+.hero-card-title{font-size:0.7rem;letter-spacing:0.2em;color:var(--gold);margin-bottom:1.5rem;text-transform:uppercase}
+.price-row{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border)}
+.price-row:last-child{border-bottom:none}
+.price-label{font-size:0.85rem;color:var(--dark)}
+.price-value{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;color:var(--green)}
+.price-value span{font-family:'Zen Kaku Gothic New',sans-serif;font-size:0.7rem;color:var(--gray);font-weight:300}
+.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:1.5rem}
+.badge{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--green-light);color:var(--green);font-weight:400}
+
+/* SECTION */
+section{padding:7rem 4rem}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:0.8rem;margin-bottom:1rem}
+.section-tag::before{content:'';width:24px;height:1px;background:var(--gold)}
+.section-tag span{font-size:0.65rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:1rem;color:var(--dark)}
+.section-desc{color:var(--gray);font-size:0.88rem;line-height:2;max-width:560px;margin-bottom:3rem}
+
+/* FEATURES */
+.features{background:var(--warm)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.feature-card{background:var(--cream);padding:2rem;border-radius:8px;border:1px solid var(--border);transition:all 0.3s}
+.feature-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(45,90,61,0.08)}
+.feature-icon{width:48px;height:48px;background:var(--green-light);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;font-size:1.4rem}
+.feature-title{font-size:0.95rem;font-weight:500;color:var(--dark);margin-bottom:0.8rem}
+.feature-desc{font-size:0.82rem;color:var(--gray);line-height:2}
+
+/* COURSE */
+.course{background:var(--cream)}
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.course-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:all 0.3s}
+.course-card:hover{box-shadow:0 12px 40px rgba(45,90,61,0.08)}
+.course-card-head{background:var(--green);padding:1.5rem 2rem;position:relative;overflow:hidden}
+.course-card-head::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,0.05);border-radius:50%}
+.course-level{font-size:0.65rem;letter-spacing:0.2em;color:rgba(250,247,242,0.6);text-transform:uppercase;margin-bottom:0.5rem}
+.course-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);letter-spacing:0.05em}
+.course-body{padding:2rem;background:#fff}
+.course-price{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--green);margin-bottom:1.2rem}
+.course-price span{font-family:'Zen Kaku Gothic New',sans-serif;font-size:0.75rem;color:var(--gray);font-weight:300}
+.course-features{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem}
+.course-features li{font-size:0.82rem;color:var(--dark);display:flex;align-items:center;gap:0.8rem}
+.course-features li::before{content:'✓';color:var(--green);font-weight:500;flex-shrink:0}
+
+/* FLOW */
+.flow{background:var(--warm)}
+.flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative}
+.flow-steps::before{content:'';position:absolute;top:2rem;left:10%;right:10%;height:1px;background:linear-gradient(90deg,var(--green),var(--gold),var(--green));z-index:0}
+.flow-step{position:relative;z-index:1;text-align:center}
+.flow-step-num{width:4rem;height:4rem;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;position:relative}
+.flow-step-num span{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--cream)}
+.flow-step-title{font-size:0.88rem;font-weight:500;color:var(--dark);margin-bottom:0.5rem}
+.flow-step-desc{font-size:0.78rem;color:var(--gray);line-height:1.8}
+
+/* SUPPORT */
+.support{background:var(--cream)}
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.support-item{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 0;border-bottom:1px solid var(--border)}
+.support-item:last-child{border-bottom:none}
+.support-icon{width:40px;height:40px;background:var(--green-light);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.support-title{font-size:0.9rem;font-weight:500;color:var(--dark);margin-bottom:3px}
+.support-desc{font-size:0.8rem;color:var(--gray);line-height:1.8}
+.support-visual{background:var(--green);border-radius:12px;padding:3rem;color:var(--cream)}
+.support-visual-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:1rem;line-height:1.2}
+.support-visual-desc{font-size:0.85rem;line-height:2;color:rgba(250,247,242,0.8);margin-bottom:2rem}
+.support-stat{display:flex;gap:2rem;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--gold2);line-height:1}
+.stat-label{font-size:0.7rem;letter-spacing:0.1em;color:rgba(250,247,242,0.6);margin-top:4px}
+
+/* FAQ */
+.faq{background:var(--warm)}
+.faq-list{max-width:700px}
+.faq-item{border-top:1px solid var(--border)}
+.faq-item:last-child{border-bottom:1px solid var(--border)}
+.faq-q{padding:1.5rem 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:2rem}
+.faq-q-text{font-size:0.88rem;font-weight:400;color:var(--dark)}
+.faq-icon{width:24px;height:24px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--green);font-size:1rem;transition:all 0.3s}
+.faq-item.open .faq-icon{transform:rotate(45deg);border-color:var(--green);background:var(--green-light)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+.faq-a-inner{padding:0 0 1.5rem;color:var(--gray);font-size:0.82rem;line-height:2.2}
+.faq-item.open .faq-a{max-height:200px}
+
+/* CTA */
+.cta{background:var(--green);position:relative;overflow:hidden}
+.cta::before{content:'Simplia';position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',serif;font-size:14rem;font-weight:300;color:rgba(255,255,255,0.04);white-space:nowrap;pointer-events:none}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;padding:7rem 2rem;position:relative;z-index:1}
+.cta-tag{display:inline-flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem}
+.cta-tag::before,.cta-tag::after{content:'';width:24px;height:1px;background:var(--gold2)}
+.cta-tag span{font-size:0.65rem;letter-spacing:0.25em;color:var(--gold2);text-transform:uppercase}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:1rem}
+.cta-desc{color:rgba(250,247,242,0.7);font-size:0.88rem;line-height:2;margin-bottom:2.5rem}
+.btn-white{background:var(--cream);color:var(--green);padding:1rem 2.5rem;font-size:0.8rem;letter-spacing:0.1em;border:none;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;font-weight:500;text-decoration:none;display:inline-block;transition:all 0.3s;border-radius:2px}
+.btn-white:hover{background:#fff}
+
+/* FOOTER */
+footer{background:var(--dark);padding:4rem;color:rgba(250,247,242,0.5)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem}
+.footer-logo-en{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;letter-spacing:0.15em;color:var(--cream)}
+.footer-logo-ja{font-size:0.6rem;letter-spacing:0.15em;margin-top:2px}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{color:rgba(250,247,242,0.5);text-decoration:none;font-size:0.75rem;letter-spacing:0.08em;transition:color 0.3s}
+.footer-links a:hover{color:var(--cream)}
+.footer-copy{width:100%;text-align:center;font-size:0.7rem;padding-top:2rem;border-top:1px solid rgba(250,247,242,0.1);margin-top:1rem}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:all 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+
+/* MOBILE */
+@media(max-width:768px){
+  .schedule-grid{grid-template-columns:1fr!important}
+  
+  nav{padding:1rem 1.5rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;gap:2rem}
+  .hero-visual{order:-1}
+  .hero-bg-text{display:none}
+  section{padding:4rem 1.5rem}
+  .features-grid{grid-template-columns:1fr}
+  .course-grid{grid-template-columns:1fr}
+  .flow-steps{grid-template-columns:1fr 1fr;gap:2rem}
+  .flow-steps::before{display:none}
+  .support-grid{grid-template-columns:1fr}
+  .footer-inner{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center;flex-wrap:wrap}
+  footer{padding:3rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-en">Simplia</div>
+    <div class="nav-logo-ja">シンプリア｜オンライン簿記教室</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="javascript:void(0)" onclick="scrollToSection('features')" >特徴</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('course')" >コース</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('flow')" >受講の流れ</a></li>
+    <li><a href="javascript:void(0)" onclick="scrollToSection('schedule')" >受付時間</a></li><li><a href="javascript:void(0)" onclick="scrollToSection('faq')" >FAQ</a></li>
+  </ul>
+  <a href="javascript:void(0)" onclick="scrollToSection('contact')"  class="nav-cta">無料相談する</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg-text">簿記</div>
+  <div class="hero-content">
+    <div class="hero-tag"><span>Online Bookkeeping School</span></div>
+    <h1 class="hero-title">簿記を、<br><em>もっとシンプルに。</em><br>もっと身近に。</h1>
+    <p class="hero-desc">Simpliaは、簿記3級・2級合格を目指す方のためのオンライン教室です。Zoomによるライブ授業で、わからないことをその場で解決しながら着実に合格へ。</p>
+    <div class="hero-actions">
+      <a href="javascript:void(0)" onclick="scrollToSection('contact')"  class="btn-primary">無料相談する</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('course')"  class="btn-secondary">コースを見る</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-title">料金プラン</div>
+      <div class="price-row">
+        <span class="price-label">月額プラン</span>
+        <div class="price-value">¥3,000 <span>/ 月</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-label">単発受講</span>
+        <div class="price-value">¥1,000 <span>/ 回</span></div>
+      </div>
+      <div class="badge-row">
+        <span class="badge">📹 Zoomライブ授業</span>
+        <span class="badge">💬 メール質問対応</span>
+        <span class="badge">📱 LINE質問対応</span>
+        <span class="badge">📚 3級・2級対応</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-inner">
+    <div class="section-tag reveal"><span>Features</span></div>
+    <h2 class="section-title reveal">Simpliaが選ばれる理由</h2>
+    <p class="section-desc reveal">難しいと思われがちな簿記を、シンプルにわかりやすく。初心者の方でも安心して学べる環境を整えています。</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">📹</div>
+        <div class="feature-title">Zoomライブ授業</div>
+        <p class="feature-desc">録画授業ではなく、リアルタイムのライブ授業だからこそ、その場で質問・理解を深められます。</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">メール・LINEで質疑応答</div>
+        <p class="feature-desc">授業以外でもわからないことがあれば、メールやLINEでいつでも質問できます。</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">業界最安値クラスの料金</div>
+        <p class="feature-desc">月額3,000円・単発1,000円から受講できます。気軽に始められる価格設定が好評です。</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📚</div>
+        <div class="feature-title">3級・2級に対応</div>
+        <p class="feature-desc">簿記3級の基礎から2級の応用まで、あなたのレベルに合わせて対応します。</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">🏠</div>
+        <div class="feature-title">自宅で受講できる</div>
+        <p class="feature-desc">通学不要。スマホ・パソコンがあれば、自宅からいつでも受講できます。</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">合格に特化したカリキュラム</div>
+        <p class="feature-desc">試験に出るポイントを重点的に学習。効率よく合格を目指せます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE -->
+<section class="course" id="course">
+  <div class="section-inner">
+    <div class="section-tag reveal"><span>Course</span></div>
+    <h2 class="section-title reveal">コース・料金</h2>
+    <p class="section-desc reveal">あなたのライフスタイルに合わせて、月額プランか単発プランを選べます。</p>
+    <div class="course-grid">
+      <div class="course-card reveal">
+        <div class="course-card-head">
+          <div class="course-level">Monthly Plan</div>
+          <div class="course-name">月額プラン</div>
+        </div>
+        <div class="course-body">
+          <div class="course-price">¥3,000 <span>/ 月</span></div>
+          <ul class="course-features">
+            <li>毎月の授業に定額で参加</li>
+            <li>メール・LINE質問対応</li>
+            <li>3級・2級どちらも対応</li>
+            <li>月途中からでも参加OK</li>
+            <li>いつでも解約可能</li>
+          </ul>
+          <a href="javascript:void(0)" onclick="scrollToSection('contact')"  class="btn-primary" style="width:100%;text-align:center">このプランで始める</a>
+        </div>
+      </div>
+      <div class="course-card reveal reveal-delay-1">
+        <div class="course-card-head" style="background:var(--gold)">
+          <div class="course-level">Single Lesson</div>
+          <div class="course-name">単発プラン</div>
+        </div>
+        <div class="course-body">
+          <div class="course-price">¥1,000 <span>/ 回</span></div>
+          <ul class="course-features">
+            <li>1回から気軽に受講</li>
+            <li>メール・LINE質問対応</li>
+            <li>3級・2級どちらも対応</li>
+            <li>まず試してみたい方におすすめ</li>
+            <li>好きなタイミングで受講</li>
+          </ul>
+          <a href="javascript:void(0)" onclick="scrollToSection('contact')"  class="btn-primary" style="width:100%;text-align:center;background:var(--gold)">このプランで始める</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="flow" id="flow">
+  <div class="section-inner">
+    <div class="section-tag reveal"><span>How to Start</span></div>
+    <h2 class="section-title reveal">受講までの流れ</h2>
+    <p class="section-desc reveal">お申し込みから授業開始まで、簡単4ステップ。</p>
+    <div class="flow-steps">
+      <div class="flow-step reveal">
+        <div class="flow-step-num"><span>01</span></div>
+        <div class="flow-step-title">無料相談</div>
+        <p class="flow-step-desc">まずはお気軽にご相談ください。目標や現在のレベルをお聞きします。</p>
+      </div>
+      <div class="flow-step reveal reveal-delay-1">
+        <div class="flow-step-num"><span>02</span></div>
+        <div class="flow-step-title">プラン選択</div>
+        <p class="flow-step-desc">月額プランか単発プランか、あなたに合ったプランを選びます。</p>
+      </div>
+      <div class="flow-step reveal reveal-delay-2">
+        <div class="flow-step-num"><span>03</span></div>
+        <div class="flow-step-title">日程調整</div>
+        <p class="flow-step-desc">Zoomの授業日程をご都合に合わせて調整します。</p>
+      </div>
+      <div class="flow-step reveal reveal-delay-3">
+        <div class="flow-step-num"><span>04</span></div>
+        <div class="flow-step-title">授業スタート</div>
+        <p class="flow-step-desc">Zoomで授業開始！わからないことはその場で質問できます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section class="support" id="support">
+  <div class="section-inner">
+    <div class="support-grid">
+      <div>
+        <div class="section-tag reveal"><span>Support</span></div>
+        <h2 class="section-title reveal">充実のサポート体制</h2>
+        <p class="section-desc reveal">授業以外でも、学習のサポートをしっかり行います。</p>
+        <div class="support-item reveal">
+          <div class="support-icon">📧</div>
+          <div>
+            <div class="support-title">メールサポート</div>
+            <p class="support-desc">授業外でわからないことがあれば、メールでいつでも質問できます。</p>
+          </div>
+        </div>
+        <div class="support-item reveal">
+          <div class="support-icon">📱</div>
+          <div>
+            <div class="support-title">LINEサポート</div>
+            <p class="support-desc">LINEでも気軽に質問できます。スマホからサクッと相談できます。</p>
+          </div>
+        </div>
+        <div class="support-item reveal">
+          <div class="support-icon">📹</div>
+          <div>
+            <div class="support-title">Zoomライブ授業</div>
+            <p class="support-desc">リアルタイムの授業でその場で解決。録画と違い、双方向のやり取りが可能です。</p>
+          </div>
+        </div>
+      </div>
+      <div class="support-visual reveal">
+        <div class="support-visual-title">まずは<br>無料相談から</div>
+        <p class="support-visual-desc">「簿記を勉強したいけど何から始めればいいかわからない」そんな方もお気軽にご相談ください。あなたの状況に合わせて最適な学習プランをご提案します。</p>
+        <div class="support-stat">
+          <div class="stat-item">
+            <div class="stat-num">¥1,000</div>
+            <div class="stat-label">から始められる</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">3・2</div>
+            <div class="stat-label">級に対応</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">24h</div>
+            <div class="stat-label">質問受付</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+
+<!-- VISUAL CARDS -->
+<section style="background:var(--cream);padding:3rem 4rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;">
+
+      <div style="border-radius:12px;overflow:hidden;height:240px;position:relative;background:linear-gradient(135deg,#2D5A3D 0%,#3D7A54 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;">
+        <div style="font-size:3.5rem;">📒</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#FAF7F2;letter-spacing:0.05em">簿記3級・2級</div>
+        <div style="font-size:0.75rem;color:rgba(250,247,242,0.7);letter-spacing:0.1em">合格を目指す</div>
+      </div>
+
+      <div style="border-radius:12px;overflow:hidden;height:240px;position:relative;background:linear-gradient(135deg,#B8963E 0%,#D4AF6A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;">
+        <div style="font-size:3.5rem;">💻</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#FAF7F2;letter-spacing:0.05em">Zoomライブ授業</div>
+        <div style="font-size:0.75rem;color:rgba(250,247,242,0.8);letter-spacing:0.1em">リアルタイムで学ぶ</div>
+      </div>
+
+      <div style="border-radius:12px;overflow:hidden;height:240px;position:relative;background:linear-gradient(135deg,#1A2420 0%,#2D5A3D 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;">
+        <div style="font-size:3.5rem;">💬</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#FAF7F2;letter-spacing:0.05em">メール・LINE</div>
+        <div style="font-size:0.75rem;color:rgba(250,247,242,0.7);letter-spacing:0.1em">いつでも質問できる</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section style="background:var(--warm);padding:5rem 4rem;" id="schedule">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-tag reveal"><span>Schedule</span></div>
+    <h2 class="section-title reveal">授業の受付時間</h2>
+    <p class="section-desc reveal">お客様のライフスタイルに合わせて、平日夜間・休日にも対応しています。</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;" class="reveal">
+      <div style="background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--green);padding:1.2rem 2rem;">
+          <div style="font-size:0.65rem;letter-spacing:0.2em;color:rgba(250,247,242,0.6);margin-bottom:4px;text-transform:uppercase">Weekday</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--cream)">平日</div>
+        </div>
+        <div style="padding:2rem;">
+          <div style="display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)">
+            <div style="width:40px;height:40px;background:var(--green-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🌙</div>
+            <div>
+              <div style="font-size:0.78rem;color:var(--gray);margin-bottom:2px">夜間</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--green)">19:00 — 23:00</div>
+            </div>
+          </div>
+          <div style="padding-top:1rem;font-size:0.78rem;color:var(--gray);line-height:1.8">仕事帰りや夕食後にじっくり学べます。</div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--gold);padding:1.2rem 2rem;">
+          <div style="font-size:0.65rem;letter-spacing:0.2em;color:rgba(250,247,242,0.6);margin-bottom:4px;text-transform:uppercase">Weekend & Holiday</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--cream)">休日</div>
+        </div>
+        <div style="padding:2rem;">
+          <div style="display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)">
+            <div style="width:40px;height:40px;background:#FEF9EE;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🌅</div>
+            <div>
+              <div style="font-size:0.78rem;color:var(--gray);margin-bottom:2px">午前</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold)">09:00 — 12:00</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)">
+            <div style="width:40px;height:40px;background:#FEF9EE;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">☀️</div>
+            <div>
+              <div style="font-size:0.78rem;color:var(--gray);margin-bottom:2px">午後</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold)">14:00 — 20:00</div>
+            </div>
+          </div>
+          <div style="padding-top:1rem;font-size:0.78rem;color:var(--gray);line-height:1.8">まとまった時間が取れる休日にしっかり学べます。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div class="section-tag reveal"><span>FAQ</span></div>
+    <h2 class="section-title reveal">よくある質問</h2>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">簿記の知識がゼロでも受講できますか？</span>
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">はい、まったく問題ありません。簿記3級は初心者向けの内容からスタートします。「数字が苦手」「勉強が久しぶり」という方も多く受講されています。まずはお気軽にご相談ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">授業はどのくらいの頻度で行われますか？</span>
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">お客様のご都合に合わせて日程を調整します。週1回・月2回など、ライフスタイルに合わせた受講が可能です。無料相談時にご希望をお聞かせください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">スマホだけで受講できますか？</span>
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">はい、スマホでもZoomアプリをインストールすれば受講できます。ただし、テキストや問題集を見ながら受講される場合は、パソコンやタブレットがより快適です。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">月額プランはいつでも解約できますか？</span>
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">はい、いつでも解約できます。縛りや違約金は一切ありません。まずは単発プランで試してから月額プランに移行される方も多いです。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">2級まで対応していますか？</span>
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">はい、3級・2級どちらも対応しています。3級から始めて2級まで継続して学ぶことも可能です。目標の級に合わせたカリキュラムを提案します。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="cta-inner reveal">
+    <div class="cta-tag"><span>Start Today</span></div>
+    <h2 class="cta-title">まずは無料相談<br>お気軽にどうぞ</h2>
+    <p class="cta-desc">「どのプランが合うかわからない」「本当に合格できるか不安」そんな方もお気軽にご相談ください。あなたに合った学習プランをご提案します。</p>
+    <a href="mailto:naxao.official@gmail.com" class="btn-white">無料相談・お問い合わせ</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo-en">Simplia</div>
+      <div class="footer-logo-ja">シンプリア｜オンライン簿記教室</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="javascript:void(0)" onclick="scrollToSection('features')" >特徴</a></li>
+      <li><a href="javascript:void(0)" onclick="scrollToSection('course')" >コース</a></li>
+      <li><a href="javascript:void(0)" onclick="scrollToSection('flow')" >受講の流れ</a></li>
+      <li><a href="javascript:void(0)" onclick="scrollToSection('schedule')" >受付時間</a></li><li><a href="javascript:void(0)" onclick="scrollToSection('faq')" >FAQ</a></li>
+      <li><a href="javascript:void(0)" onclick="scrollToSection('contact')" >無料相談</a></li>
+    </ul>
+    <p class="footer-copy">© 2026 Simplia. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+function scrollToSection(id){
+  var el=document.getElementById(id);
+  if(el){var top=el.getBoundingClientRect().top+window.pageYOffset-80;window.scrollTo({top:top,behavior:'smooth'});}
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
+  document.querySelectorAll('.reveal').forEach(el=>{
+    if(el.getBoundingClientRect().top<window.innerHeight-60)el.classList.add('visible');
+  });
+});
+
+function toggleFaq(el){
+  const item=el.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+function toggleMenu(){
+  const links=document.querySelector('.nav-links');
+  if(links.style.display==='flex'){
+    links.style.display='none';
+  } else {
+    links.style.cssText='display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(250,247,242,0.98);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border)';
+    links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.style.display='none',{once:true}));
+  }
+}
+
+setTimeout(()=>{
+  document.querySelectorAll('.reveal').forEach(el=>{
+    if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('visible');
+  });
+},100);
+</script>
+</body>
+</html>
